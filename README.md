@@ -7,15 +7,18 @@
     boostrap을 이용해서 반응형 resizing이 되므로, 모바일 기기에서도 UX면에서 불편함이 없음.
 
 - 사용된 라이브러리 및 프레임워크
-    - JQuery
-    - Bootstrap
-    - NoSleep
+    - JQuery (https://jquery.com/)
+    - Bootstrap (https://getbootstrap.com/)
+    - NoSleep (https://github.com/richtr/NoSleep.js/)
+    - Recorderjs (https://github.com/mattdiamond/Recorderjs)
+    - Modernizr (https://modernizr.com/)
 
 - 주요 기능
     - 타이머
     - 주제별 재생
-    - 시간대별 진행 상태 표시 (진행 중, 괜찮음, 끝날 타이밍, 얼른 끝내!!)
+    - 시간대별 진행 상태 표시
     - 리플레이 기능
-
-- Todo
-    - 녹화 기능 만들기
+    - 녹화 기능 (Thanks, Recordjs!)
+    - 폰 이용 시, 화면 안꺼지고 유지됨 (Thanks, NoSleepJS!)
+    
+※ 해커스 오픽 Start Intermediate 교재 mp3 사용 (http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9791158551988&orderClick=LEa&Kc=)
