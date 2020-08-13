@@ -1,18 +1,11 @@
 
 
 $(document).ready(function() {
-    const downloadLink = document.getElementById('download');
-    const recordedChunks = [];
-
     var isPlaying = false;
     var startTime = Date.now();
     var timer;
     var timerLabel = document.getElementById("timer");
     var player = new Audio();
-    var recorder = null;
-    var canRecord = false;
-
-    var lastestClickedItem;
 
     var items = [
         [
@@ -74,12 +67,6 @@ $(document).ready(function() {
         timerLabel.innerHTML = "00:00.000";
         startTime = Date.now();
         isPlaying = false;
-
-        if (recorder != null && recorder.state != "inactive") {
-            recorder.stop();
-        }
-
-        recordedChunks.length = 0;
     }
 
     function createCardBody(obj) {
@@ -113,11 +100,6 @@ $(document).ready(function() {
                 player.play();
                 
                 isPlaying = true;
-
-                if (canRecord) {
-                    recorder.start();
-                }
-
             };
 
         }
@@ -201,57 +183,6 @@ $(document).ready(function() {
         timer = setTimeout(tick, delay);
         startTime = Date.now() + delay;
     });
-
-    var handleSuccess = function(stream) {
-        
-        recorder = new MediaRecorder(
-            stream, {mimeType: 'video/webm;codecs=vp9'}
-        );
-
-        recorder.addEventListener('dataavailable', function(e) {
-            if (e.data.size > 0) {
-                recordedChunks.push(e.data);
-            }
-        });
-
-        recorder.addEventListener('stop', function() {
-            downloadLink.href = URL.createObjectURL(new Blob(recordedChunks));
-            downloadLink.download = lastestClickedItem[0].title + '.wav';
-
-            downloadLink.click();
-        });
-
-        canRecord = true;
-    };
-
-    function requestMicPermission() {
-        navigator.mediaDevices
-            .getUserMedia({ audio: true, video: false })
-            .then(handleSuccess)
-    }
-
-    /*
-    녹음 기능은 모바일 기기 호환 문제로 구현만 해둠.
-    requestMicPermission();
-
-    document.getElementById("save").onclick = function() {
-        navigator.permissions.query({name:'microphone'}).then(function(result) {
-            if (canRecord) {
-          
-                if (isPlaying == false) {
-                    alert("하단의 질문을 눌러 답변을 시작해주세요!");
-                    return;
-                }
-                
-                reset();
-
-            } else {
-                alert('마이크 권한이 없습니다!\n먼저 권한을 승인 후 다시 녹음해주세요!');
-                requestMicPermission();
-            }
-        });
-    };
-    */
 
 });
 
