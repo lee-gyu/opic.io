@@ -299,7 +299,7 @@ $(document).ready(function() {
             } else if (navigator.mediaDevices) {
                 // supported
                 if (recorder == null) {
-                    navigator.mediaDevices.getUserMedia(constraints, createAudioContext, onError);
+                    navigator.mediaDevices.getUserMedia(constraints).then(createAudioContext).catch(onError);
                 } else {
                     startRecording();
                 }
