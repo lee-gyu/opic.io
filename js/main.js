@@ -79,8 +79,6 @@ $(document).ready(function() {
         player.src = "./mp3/" + lastestPlayed[0].mp3 + lastestPlayed[1] + ".mp3";
         player.play();
         title.innerText = "[" +  lastestPlayed[0].title + "] " + lastestPlayed[0].subtitles[lastestPlayed[1]-1];
-        
-
         isPlaying = true;
     }
 
