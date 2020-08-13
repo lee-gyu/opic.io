@@ -1,7 +1,9 @@
 # OPIC.IO
 
 - 본 프로그램의 mp3 파일은 해커스 오픽 교재에서 무료로 제공되는 파일들을 사용했습니다.
-- [해커스 오픽 Start Intermediate 교재](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9791158551988&orderClick=LEa&Kc=)
+
+    [해커스 오픽 Start Intermediate 교재](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9791158551988&orderClick=LEa&Kc=)
+    
 - 프로그램 화면 (Web-Application)
 
     <img src="./img/capture.jpg" width=400/>
