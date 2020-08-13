@@ -265,6 +265,20 @@ $(document).ready(function() {
         });
     }
 
+    function createAudioContext(stream) {
+        audio_context = new AudioContext();
+        gumStream = stream;
+        
+        var input = audio_context.createMediaStreamSource(stream);
+        recorder = new Recorder(input, {numChannels:1});
+
+        startRecording();
+    }
+
+    function onError(e) {
+        console.error(e);
+    }
+
     btnRecord.onclick = function() {
         if (isRecoding) {
             
@@ -278,24 +292,19 @@ $(document).ready(function() {
             if (Modernizr.getusermedia) {
                 // supported
                 if (recorder == null) {
-                    Modernizr.prefixed('getUserMedia', navigator)(constraints, function(stream) {
-    
-                        audio_context = new AudioContext();
-                        gumStream = stream;
-                        
-                        var input = audio_context.createMediaStreamSource(stream);
-                        recorder = new Recorder(input, {numChannels:1});
-
-                        startRecording();
-
-                    }, function(e) {
-                        console.error('Error');
-                    });
+                    Modernizr.prefixed('getUserMedia', navigator)(constraints, createAudioContext, onError);
+                } else {
+                    startRecording();
+                }
+            } else if (navigator.mediaDevices) {
+                // supported
+                if (recorder == null) {
+                    navigator.mediaDevices.getUserMedia(constraints, createAudioContext, onError);
                 } else {
                     startRecording();
                 }
             } else {
-                alert("웹 기술 문제로 애플 기기는 녹화 안됨!");
+                alert("웹 기술 문제로 애플 기기는 Safari로 접속해야함!");
             }
         }
     };
