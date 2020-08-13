@@ -2,10 +2,14 @@
 
 $(document).ready(function() {
     var lastAudio = undefined;
-    var lastClicked = undefined;
+    var isPlaying = false;
+    var startTime = Date.now();
+    var timer;
+    var timerLabel = document.getElementById("timer");
+
     var items = [
         [
-            newObj("자기소개", "I", 1, [])
+            newObj("자기소개", "I", 1, ["자신감!"])
         ],
 
         [
@@ -46,6 +50,16 @@ $(document).ready(function() {
         return obj;
     }
 
+    function reset() {
+
+        if (lastAudio != undefined) {
+            lastAudio.pause();
+        }
+
+        clearTimeout(timer);
+        timerLabel.innerHTML = "00:00.000";
+        startTime = Date.now();
+    }
 
     function createCardBody(obj) {
         var bodyContainer = document.createElement("div");
@@ -70,14 +84,17 @@ $(document).ready(function() {
             listGroup.appendChild(btn);
             
             btn.onclick = function() {
-                if (lastAudio != undefined) {
-                    lastAudio.pause();
-                }
+                reset();
         
                 var audio = new Audio();
             
+                $(audio).on("loadedmetadata", function() {
+                    let delay = (audio.duration - 3) * 1000;
+                    timer = setTimeout(tick, delay);
+                    startTime = Date.now() + delay;
+                });
+
                 audio.src = "./mp3/" + obj.mp3 + tmp + ".mp3";
-                
                 audio.play();
         
                 lastAudio = audio;
@@ -113,12 +130,32 @@ $(document).ready(function() {
         cardContainer.appendChild(cardBody);
 
         cardHeader.onclick = function() {
-            
             $('.collapse').collapse('hide');
             $(cardContainer).find('.collapse').collapse('toggle');
         };
 
         return cardContainer;
+    }
+
+    function fillZero(n, number) {
+        var tostr = '' + number;
+
+        while (tostr.length < n) {
+            tostr = '0' + tostr;
+        }
+
+        return tostr;
+    }
+
+    function tick() {
+        var diff = parseInt(Date.now() - startTime)
+        var ms = diff % 1000;
+        var seconds = parseInt((diff / 1000) % 60);
+        var minutes = parseInt((diff / 1000) / 60);
+
+        timerLabel.innerHTML = fillZero(2, minutes) + ':' + fillZero(2, seconds) + '.' + fillZero(3, ms);
+
+        timer = setTimeout(tick, 13);
     }
 
     (function init() {
