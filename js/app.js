@@ -1,6 +1,8 @@
 
 
 $(document).ready(function() {
+    const constraints = {audio: true, video:false};
+
     var isPlaying = false;
     var startTime = Date.now();
     var timer;
@@ -10,11 +12,10 @@ $(document).ready(function() {
     var lastestPlayed = null;
     var noSleep = new NoSleep();
     var isRecoding = false;
-    var canRecord = false;
     var btnRecord = document.getElementById("record");
 
     var audio_context;
-    var rec = null;
+    var recorder = null;
     var gumStream;
 
     var headers = ["자기소개", "선택주제", "돌발주제", "롤플레잉"]
@@ -235,24 +236,6 @@ $(document).ready(function() {
         play();
     };
 
-    function startUserMedia(stream) {
-        audio_context = new AudioContext();
-
-        var input = audio_context.createMediaStreamSource(stream);
-    
-        gumStream = stream;
-        
-        recorder = new Recorder(input, {numChannels:1});
-        startRecording();
-    }
-
-    function startRecording() {
-        recorder.record();
-        btnRecord.innerText = 'Stop recording';
-        isRecoding = true;
-        canRecord = true;
-    }
-
     try {
         // webkit shim
         AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -262,6 +245,13 @@ $(document).ready(function() {
         alert('No web audio support in this browser!');
     }
 
+    function startRecording() {
+        recorder.record();
+        btnRecord.innerText = 'Stop recording';
+        isRecoding = true;
+        gumStream.getAudioTracks()[0].start();
+    }
+
     function createDownloadLink() {
         recorder.exportWAV(function(blob) {
             var url = URL.createObjectURL(blob);
@@ -269,7 +259,7 @@ $(document).ready(function() {
             var a = document.createElement('a');
             var date = new Date();
             var name = date.getFullYear() + '_' + fillZero(2, date.getMonth() + 1) + '_' + fillZero(2, date.getDate() + 1) + '_' + fillZero(2, date.getHours()) + '_' + 
-                        fillZero(2, date.getMinutes()) + '_' + fillZero(2, date.getSeconds()) + '_녹화본.wav';
+                        fillZero(2, date.getMinutes()) + '_' + fillZero(2, date.getSeconds()) + '_녹화.wav';
 
             a.href = url;
             a.download = name;
@@ -295,21 +285,27 @@ $(document).ready(function() {
 
             isRecoding = false;
         } else {
-            if (rec == null && canRecord == false) {
-                if (canRecord == false) {
-                    if (Modernizr.getusermedia) {
-                        // supported
-                        Modernizr.prefixed('getUserMedia', navigator)({audio: true, video:false}, startUserMedia, function(e) {
-                            console.error('Error');
-                        });
-                    } else {
-                        alert('녹화 안되는 기기임!!');
-                    }
+            if (Modernizr.getusermedia) {
+                // supported
+                if (recorder == null) {
+                    Modernizr.prefixed('getUserMedia', navigator)(constraints, function(stream) {
+    
+                        audio_context = new AudioContext();
+                        gumStream = stream;
+                        
+                        var input = audio_context.createMediaStreamSource(stream);
+                        recorder = new Recorder(input, {numChannels:1});
+
+                        startRecording();
+
+                    }, function(e) {
+                        console.error('Error');
+                    });
+                } else {
+                    startRecording();
                 }
             } else {
-                recorder.clear();
-                canRecord == false;
-                startRecording();
+                alert('녹화 안되는 기기임!!');
             }
         }
     };
