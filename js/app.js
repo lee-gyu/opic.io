@@ -243,7 +243,6 @@ $(document).ready(function() {
         recorder.record();
         btnRecord.innerText = 'Stop recording';
         isRecoding = true;
-        gumStream.getAudioTracks()[0].start();
     }
 
     function createDownloadLink() {
