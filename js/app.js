@@ -266,9 +266,24 @@ $(document).ready(function() {
         });
     }
 
+    function getAudioContext() {
+        var AudioContext = window.AudioContext // Default
+                            || window.webkitAudioContext // Safari and old versions of Chrome
+                            || false; 
+
+        if (AudioContext) {
+            // Do whatever you want using the Web Audio API
+            return new AudioContext();
+            // ...
+        }
+
+        // Web Audio API is not supported
+        // Alert the user
+        alert("IOS인 경우, safari로 접속하세요,\n아니라면 기술 문제입니다..");
+    }
+
     function createAudioContext(stream) {
-        var tmp = AudioContext || window.webkitAudioContext;
-        audio_context = new tmp();
+        audio_context = getAudioContext();
         gumStream = stream;
         
         var input = audio_context.createMediaStreamSource(stream);
