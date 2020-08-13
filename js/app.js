@@ -297,9 +297,14 @@ $(document).ready(function() {
         } else {
             if (rec == null && canRecord == false) {
                 if (canRecord == false) {
-                    navigator.getUserMedia({audio: true, video:false}, startUserMedia, function(e) {
-                        console.error('Error');
-                    });
+                    if (Modernizr.getusermedia) {
+                        // supported
+                        Modernizr.prefixed('getUserMedia', navigator)({audio: true, video:false}, startUserMedia, function(e) {
+                            console.error('Error');
+                        });
+                    } else {
+                        alert('녹화 안되는 기기임!!');
+                    }
                 }
             } else {
                 recorder.clear();
