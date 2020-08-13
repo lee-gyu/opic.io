@@ -1,0 +1,16 @@
+
+@keyframes blink {
+    from {
+       color: red;
+    }
+    to {
+        color: white;
+    }
+  }
+
+.time-label-blink {
+    animation-duration: 400ms;
+    animation-name: blink;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
