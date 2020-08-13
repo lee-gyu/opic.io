@@ -267,23 +267,26 @@ $(document).ready(function() {
     }
 
     function getAudioContext() {
-        var AudioContext = window.AudioContext // Default
-                            || window.webkitAudioContext // Safari and old versions of Chrome
-                            || false; 
+        if (Modernizr.webaudio) {
+            // supported
+            window.AudioContext = window.AudioContext ||
+            window.webkitAudioContext;
 
-        if (AudioContext) {
-            // Do whatever you want using the Web Audio API
             return new AudioContext();
-            // ...
+        } else {
+            // not-supported
+            alert("웹 오디오 지원이 되지 않는 브라우저입니다.\nIOS는 safari, 다른 기기는 chrome을 사용해주세요.");
+            return null;
         }
-
-        // Web Audio API is not supported
-        // Alert the user
-        alert("IOS인 경우, safari로 접속하세요,\n아니라면 기술 문제입니다..");
     }
 
     function createAudioContext(stream) {
         audio_context = getAudioContext();
+
+        if (audio_context == null) {
+            return;
+        }
+
         gumStream = stream;
         
         var input = audio_context.createMediaStreamSource(stream);
