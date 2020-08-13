@@ -238,13 +238,6 @@ $(document).ready(function() {
         play();
     };
 
-    function startRecording() {
-        recorder.clear();
-        recorder.record();
-        btnRecord.innerText = 'Stop recording';
-        isRecoding = true;
-    }
-
     function createDownloadLink() {
         recorder.exportWAV(function(blob) {
             var url = URL.createObjectURL(blob);
@@ -292,7 +285,9 @@ $(document).ready(function() {
         var input = audio_context.createMediaStreamSource(stream);
         recorder = new Recorder(input, {numChannels:1});
 
-        startRecording();
+        recorder.record();
+        btnRecord.innerText = 'Stop recording';
+        isRecoding = true;
     }
 
     function onError(e) {
@@ -312,20 +307,12 @@ $(document).ready(function() {
             
             if (navigator.mediaDevices) {
                 // supported
-                if (recorder == null) {
-                    navigator.mediaDevices.getUserMedia(constraints)
+                navigator.mediaDevices.getUserMedia(constraints)
                         .then(createAudioContext)
                         .catch(onError);
-                } else {
-                    startRecording();
-                }
             } else if (Modernizr.getusermedia) {
                 // supported
-                if (recorder == null) {
-                    Modernizr.prefixed('getUserMedia', navigator)(constraints, createAudioContext, onError);
-                } else {
-                    startRecording();
-                } 
+                Modernizr.prefixed('getUserMedia', navigator)(constraints, createAudioContext, onError);
             } else {
                 alert("웹 기술 문제로 애플 기기는 Safari로 접속해야함!");
             }
