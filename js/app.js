@@ -281,7 +281,7 @@ $(document).ready(function() {
 
             isRecoding = false;
         } else {
-            if (Modernizr.getusermedia) {
+            if (navigator.getUserMedia) {
                 // supported
                 if (recorder == null) {
                     navigator.getUserMedia(constraints, function(stream) {
