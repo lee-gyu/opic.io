@@ -5,7 +5,9 @@ $(document).ready(function() {
     var startTime = Date.now();
     var timer;
     var timerLabel = document.getElementById("timer");
+    var title = document.getElementById("title");
     var player = new Audio();
+    var lastestPlayed = null;
 
     var items = [
         [
@@ -67,6 +69,19 @@ $(document).ready(function() {
         timerLabel.innerHTML = "00:00.000";
         startTime = Date.now();
         isPlaying = false;
+
+        title.innerText = "-";
+    }
+
+    function play() {
+        reset();
+
+        player.src = "./mp3/" + lastestPlayed[0].mp3 + lastestPlayed[1] + ".mp3";
+        player.play();
+        title.innerText = "[" +  lastestPlayed[0].title + "] " + lastestPlayed[0].subtitles[lastestPlayed[1]-1];
+        
+
+        isPlaying = true;
     }
 
     function createCardBody(obj) {
@@ -91,15 +106,9 @@ $(document).ready(function() {
 
             listGroup.appendChild(btn);
             
-            btn.onclick = function() {
-                reset();
-                
-                lastestClickedItem = [obj, tmp];
-
-                player.src = "./mp3/" + obj.mp3 + tmp + ".mp3";
-                player.play();
-                
-                isPlaying = true;
+            btn.onclick = function() {    
+                lastestPlayed = [obj, tmp];
+                play();
             };
 
         }
@@ -176,6 +185,10 @@ $(document).ready(function() {
     
     document.getElementById("reset").onclick = function() {
         reset();
+    };
+
+    document.getElementById("replay").onclick = function() {
+        play();
     };
 
     $(player).on("loadedmetadata", function() {
