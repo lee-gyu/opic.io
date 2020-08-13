@@ -236,14 +236,10 @@ $(document).ready(function() {
         play();
     };
 
-    try {
-        // webkit shim
-        AudioContext = window.AudioContext || window.webkitAudioContext;
-        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
-        URL = window.URL || window.webkitURL;
-    } catch (e) {
-        alert('No web audio support in this browser!');
-    }
+    navigator.getUserMedia  = navigator.getUserMedia ||
+                          navigator.webkitGetUserMedia ||
+                          navigator.mozGetUserMedia ||
+                          navigator.msGetUserMedia;
 
     function startRecording() {
         recorder.record();
@@ -288,7 +284,7 @@ $(document).ready(function() {
             if (Modernizr.getusermedia) {
                 // supported
                 if (recorder == null) {
-                    Modernizr.prefixed('getUserMedia', navigator)(constraints, function(stream) {
+                    navigator.getUserMedia(constraints, function(stream) {
     
                         audio_context = new AudioContext();
                         gumStream = stream;
