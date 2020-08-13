@@ -266,6 +266,8 @@ $(document).ready(function() {
         });
     }
 
+    AudioContext = AudioContext || webkitAudioContext;
+
     function createAudioContext(stream) {
         audio_context = new AudioContext();
         gumStream = stream;
@@ -312,12 +314,11 @@ $(document).ready(function() {
             }
         }
     };
-
-    $(player).on("loadedmetadata", function() {
-        let delay = (player.duration - 3) * 1000;
-        timer = setTimeout(tick, delay);
-        startTime = Date.now() + delay;
-    });
+    
+    player.onended = function() {
+        startTime = Date.now();
+        tick();
+    }
 
 });
 
