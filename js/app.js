@@ -8,6 +8,7 @@ $(document).ready(function() {
     var title = document.getElementById("title");
     var player = new Audio();
     var lastestPlayed = null;
+    var noSleep = new NoSleep();
 
     var headers = ["자기소개", "선택주제", "돌발주제", "롤플레잉"]
     var items = [
@@ -74,6 +75,7 @@ $(document).ready(function() {
 
         progress.style.width = '0%';
         title.innerText = "-";
+        noSleep.disable();
     }
 
     function play() {
@@ -83,6 +85,7 @@ $(document).ready(function() {
         player.play();
         title.innerText = "[" +  lastestPlayed[0].title + "] " + lastestPlayed[0].subtitles[lastestPlayed[1]-1];
         isPlaying = true;
+        noSleep.enable();
     }
 
     function createCardBody(obj) {
@@ -228,8 +231,6 @@ $(document).ready(function() {
         startTime = Date.now() + delay;
     });
 
-    // 폰 화면 꺼짐 방지
-    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 });
 
 
