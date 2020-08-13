@@ -1,11 +1,18 @@
 
 
 $(document).ready(function() {
-    var lastAudio = undefined;
+    const downloadLink = document.getElementById('download');
+    const recordedChunks = [];
+
     var isPlaying = false;
     var startTime = Date.now();
     var timer;
     var timerLabel = document.getElementById("timer");
+    var player = new Audio();
+    var recorder;
+    var canRecord = false;
+
+    var lastestClickedItem;
 
     var items = [
         [
@@ -62,14 +69,17 @@ $(document).ready(function() {
     }
 
     function reset() {
-
-        if (lastAudio != undefined) {
-            lastAudio.pause();
-        }
-
+        player.pause();
         clearTimeout(timer);
         timerLabel.innerHTML = "00:00.000";
         startTime = Date.now();
+        isPlaying = false;
+
+        if (recorder.state != "inactive") {
+            recorder.stop();
+        }
+
+        recordedChunks.length = 0;
     }
 
     function createCardBody(obj) {
@@ -96,19 +106,18 @@ $(document).ready(function() {
             
             btn.onclick = function() {
                 reset();
-        
-                var audio = new Audio();
-            
-                $(audio).on("loadedmetadata", function() {
-                    let delay = (audio.duration - 3) * 1000;
-                    timer = setTimeout(tick, delay);
-                    startTime = Date.now() + delay;
-                });
+                
+                lastestClickedItem = [obj, tmp];
 
-                audio.src = "./mp3/" + obj.mp3 + tmp + ".mp3";
-                audio.play();
-        
-                lastAudio = audio;
+                player.src = "./mp3/" + obj.mp3 + tmp + ".mp3";
+                player.play();
+                
+                isPlaying = true;
+
+                if (canRecord) {
+                    recorder.start();
+                }
+
             };
 
         }
@@ -185,6 +194,61 @@ $(document).ready(function() {
     
     document.getElementById("reset").onclick = function() {
         reset();
+    };
+
+    $(player).on("loadedmetadata", function() {
+        let delay = (player.duration - 3) * 1000;
+        timer = setTimeout(tick, delay);
+        startTime = Date.now() + delay;
+    });
+
+    var handleSuccess = function(stream) {
+        
+        recorder = new MediaRecorder(
+            stream, {mimeType: 'video/webm;codecs=vp9'}
+        );
+
+        recorder.addEventListener('dataavailable', function(e) {
+            if (e.data.size > 0) {
+                recordedChunks.push(e.data);
+            }
+        });
+
+        recorder.addEventListener('stop', function() {
+            downloadLink.href = URL.createObjectURL(new Blob(recordedChunks));
+            downloadLink.download = lastestClickedItem[0].title + '.wav';
+
+            downloadLink.click();
+        });
+
+        canRecord = true;
+    };
+
+    function requestMicPermission() {
+        navigator.mediaDevices
+            .getUserMedia({ audio: true, video: false })
+            .then(handleSuccess)
+    }
+
+    requestMicPermission();
+
+    document.getElementById("save").onclick = function() {
+        
+        navigator.permissions.query({name:'microphone'}).then(function(result) {
+            if (canRecord) {
+          
+                if (isPlaying == false) {
+                    alert("하단의 질문을 눌러 답변을 시작해주세요!");
+                    return;
+                }
+                
+                reset();
+
+            } else {
+                alert('마이크 권한이 없습니다!\n먼저 권한을 승인 후 다시 녹음해주세요!');
+                requestMicPermission();
+            }
+        });
     };
 
 });
