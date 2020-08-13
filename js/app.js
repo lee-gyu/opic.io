@@ -1,21 +1,23 @@
 
 
 $(document).ready(function() {
-    const constraints = {audio: true, video:false};
+    const constraints = { audio: true, video:false };
+    const player = new Audio();
+    const noSleep = new NoSleep();
+    
+    const timerLabel = document.getElementById("timer");
+    const title = document.getElementById("title");
+    const btnRecord = document.getElementById("record");
 
+    var startTime = 0;
+    var timer = 0;
     var isPlaying = false;
-    var startTime = Date.now();
-    var timer;
-    var timerLabel = document.getElementById("timer");
-    var title = document.getElementById("title");
-    var player = new Audio();
-    var lastestPlayed = null;
-    var noSleep = new NoSleep();
     var isRecoding = false;
-    var btnRecord = document.getElementById("record");
+    var lastestPlayed = null;
+    
 
-    var audio_context;
     var recorder = null;
+    var audio_context;
     var gumStream;
 
     var headers = ["자기소개", "선택주제", "돌발주제", "롤플레잉"]
@@ -276,7 +278,7 @@ $(document).ready(function() {
     }
 
     function onError(e) {
-        console.error(e);
+        alert(e);
     }
 
     btnRecord.onclick = function() {
@@ -289,20 +291,23 @@ $(document).ready(function() {
             location.href = '#recordingslist';
             isRecoding = false;
         } else {
-            if (Modernizr.getusermedia) {
+            
+            if (navigator.mediaDevices) {
+                // supported
+                if (recorder == null) {
+                    navigator.mediaDevices.getUserMedia(constraints)
+                        .then(createAudioContext)
+                        .catch(onError);
+                } else {
+                    startRecording();
+                }
+            } else if (Modernizr.getusermedia) {
                 // supported
                 if (recorder == null) {
                     Modernizr.prefixed('getUserMedia', navigator)(constraints, createAudioContext, onError);
                 } else {
                     startRecording();
-                }
-            } else if (navigator.mediaDevices) {
-                // supported
-                if (recorder == null) {
-                    navigator.mediaDevices.getUserMedia(constraints).then(createAudioContext).catch(onError);
-                } else {
-                    startRecording();
-                }
+                } 
             } else {
                 alert("웹 기술 문제로 애플 기기는 Safari로 접속해야함!");
             }
