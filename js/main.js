@@ -9,7 +9,7 @@ $(document).ready(function() {
     var timer;
     var timerLabel = document.getElementById("timer");
     var player = new Audio();
-    var recorder;
+    var recorder = null;
     var canRecord = false;
 
     var lastestClickedItem;
@@ -75,7 +75,7 @@ $(document).ready(function() {
         startTime = Date.now();
         isPlaying = false;
 
-        if (recorder.state != "inactive") {
+        if (recorder != null && recorder.state != "inactive") {
             recorder.stop();
         }
 
@@ -230,10 +230,11 @@ $(document).ready(function() {
             .then(handleSuccess)
     }
 
+    /*
+    녹음 기능은 모바일 기기 호환 문제로 구현만 해둠.
     requestMicPermission();
 
     document.getElementById("save").onclick = function() {
-        
         navigator.permissions.query({name:'microphone'}).then(function(result) {
             if (canRecord) {
           
@@ -250,6 +251,7 @@ $(document).ready(function() {
             }
         });
     };
+    */
 
 });
 
