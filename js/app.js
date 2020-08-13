@@ -9,6 +9,13 @@ $(document).ready(function() {
     var player = new Audio();
     var lastestPlayed = null;
     var noSleep = new NoSleep();
+    var isRecoding = false;
+    var canRecord = false;
+    var btnRecord = document.getElementById("record");
+
+    var audio_context;
+    var rec = null;
+    var gumStream;
 
     var headers = ["자기소개", "선택주제", "돌발주제", "롤플레잉"]
     var items = [
@@ -226,6 +233,80 @@ $(document).ready(function() {
 
     document.getElementById("replay").onclick = function() {
         play();
+    };
+
+    function startUserMedia(stream) {
+        audio_context = new AudioContext();
+
+        var input = audio_context.createMediaStreamSource(stream);
+    
+        gumStream = stream;
+        
+        recorder = new Recorder(input, {numChannels:1});
+        startRecording();
+    }
+
+    function startRecording() {
+        recorder.record();
+        btnRecord.innerText = 'Stop recording';
+        isRecoding = true;
+        canRecord = true;
+    }
+
+    try {
+        // webkit shim
+        AudioContext = window.AudioContext || window.webkitAudioContext;
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+        URL = window.URL || window.webkitURL;
+    } catch (e) {
+        alert('No web audio support in this browser!');
+    }
+
+    function createDownloadLink() {
+        recorder.exportWAV(function(blob) {
+            var url = URL.createObjectURL(blob);
+            var div = document.createElement('div');
+            var a = document.createElement('a');
+            var date = new Date();
+            var name = date.getFullYear() + '_' + fillZero(2, date.getMonth() + 1) + '_' + fillZero(2, date.getDate() + 1) + '_' + fillZero(2, date.getHours()) + '_' + 
+                        fillZero(2, date.getMinutes()) + '_' + fillZero(2, date.getSeconds()) + '_녹화본.wav';
+
+            a.href = url;
+            a.download = name;
+            a.innerText = name;
+            a.className = 'btn';
+            
+            div.className = 'list-group-item list-group-item-action';
+
+            div.appendChild(a);
+            recordingslist.appendChild(div);
+        });
+    }
+
+    btnRecord.onclick = function() {
+        if (isRecoding) {
+            
+            recorder.stop();
+            gumStream.getAudioTracks()[0].stop();
+            
+            createDownloadLink();
+            btnRecord.innerText = 'Record';
+            location.href = '#recordingslist';
+
+            isRecoding = false;
+        } else {
+            if (rec == null && canRecord == false) {
+                if (canRecord == false) {
+                    navigator.getUserMedia({audio: true, video:false}, startUserMedia, function(e) {
+                        console.error('Error');
+                    });
+                }
+            } else {
+                recorder.clear();
+                canRecord == false;
+                startRecording();
+            }
+        }
     };
 
     $(player).on("loadedmetadata", function() {
