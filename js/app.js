@@ -75,7 +75,10 @@ $(document).ready(function() {
 
         progress.style.width = '0%';
         title.innerText = "-";
-        noSleep.disable();
+
+        if (noSleep._wakeLock != null) {
+            noSleep.disable();
+        }
     }
 
     function play() {
