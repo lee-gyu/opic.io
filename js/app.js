@@ -266,10 +266,18 @@ $(document).ready(function() {
         });
     }
 
-    AudioContext = AudioContext || webkitAudioContext;
-
     function createAudioContext(stream) {
         audio_context = new AudioContext();
+        gumStream = stream;
+        
+        var input = audio_context.createMediaStreamSource(stream);
+        recorder = new Recorder(input, {numChannels:1});
+
+        startRecording();
+    }
+
+    function createAudioContextForIOS(stream) {
+        audio_context = new window.webkitAudioContext();
         gumStream = stream;
         
         var input = audio_context.createMediaStreamSource(stream);
@@ -305,7 +313,7 @@ $(document).ready(function() {
             } else if (Modernizr.getusermedia) {
                 // supported
                 if (recorder == null) {
-                    Modernizr.prefixed('getUserMedia', navigator)(constraints, createAudioContext, onError);
+                    Modernizr.prefixed('getUserMedia', navigator)(constraints, createAudioContextForIOS, onError);
                 } else {
                     startRecording();
                 } 
