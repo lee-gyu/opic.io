@@ -236,12 +236,8 @@ $(document).ready(function() {
         play();
     };
 
-    navigator.getUserMedia  = navigator.getUserMedia ||
-                          navigator.webkitGetUserMedia ||
-                          navigator.mozGetUserMedia ||
-                          navigator.msGetUserMedia;
-
     function startRecording() {
+        recorder.clear();
         recorder.record();
         btnRecord.innerText = 'Stop recording';
         isRecoding = true;
@@ -273,18 +269,16 @@ $(document).ready(function() {
         if (isRecoding) {
             
             recorder.stop();
-            gumStream.getAudioTracks()[0].stop();
             
             createDownloadLink();
             btnRecord.innerText = 'Record';
             location.href = '#recordingslist';
-
             isRecoding = false;
         } else {
-            if (navigator.getUserMedia) {
+            if (Modernizr.getusermedia) {
                 // supported
                 if (recorder == null) {
-                    navigator.getUserMedia(constraints, function(stream) {
+                    Modernizr.prefixed('getUserMedia', navigator)(constraints, function(stream) {
     
                         audio_context = new AudioContext();
                         gumStream = stream;
@@ -301,7 +295,7 @@ $(document).ready(function() {
                     startRecording();
                 }
             } else {
-                alert('녹화 안되는 기기임!!');
+                alert("웹 기술 문제로 애플 기기는 녹화 안됨!");
             }
         }
     };
