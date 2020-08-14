@@ -3,22 +3,29 @@
 $(document).ready(function() {
     const constraints = { audio: true, video:false };
     const player = new Audio();
-    const noSleep = new NoSleep();
     
     const timerLabel = document.getElementById("timer");
     const title = document.getElementById("title");
     const btnRecord = document.getElementById("record");
-
+    const btnPause = document.getElementById("pause");
+    const btnResest = document.getElementById("reset");
+    const btnReplay = document.getElementById("replay");
+    const recordingslist = document.getElementById("recordingslist");
+    const play_for_twice = document.getElementById("play_for_twice");
+    
     var startTime = 0;
     var timer = 0;
+    var timer2 = 0;
+    var playCount = 0;
     var isPlaying = false;
     var isRecoding = false;
     var lastestPlayed = null;
+    var noSleep = null;
     
-
     var recorder = null;
-    var audio_context;
-    var gumStream;
+    var input = null;
+    var mediaStream = null;
+    var audio_context = null;
 
     var headers = ["자기소개", "선택주제", "돌발주제", "롤플레잉"]
     var items = [
@@ -76,17 +83,22 @@ $(document).ready(function() {
     }
 
     function reset() {
+        playCount = 0;
+        
         player.pause();
         clearTimeout(timer);
         timerLabel.innerHTML = "00:00.000";
-        timerLabel.className = '';
+        btnPause.innerHTML = "Pause";
+        timerLabel.className = "";
         startTime = Date.now();
         isPlaying = false;
+        timer = 0;
 
-        progress.style.width = '0%';
+        progress.style.width = "0%";
         title.innerText = "-";
+        btnPause.setAttribute("disabled", '');
 
-        if (noSleep._wakeLock != null) {
+        if (noSleep != null && noSleep._wakeLock != null) {
             noSleep.disable();
         }
     }
@@ -98,6 +110,8 @@ $(document).ready(function() {
         player.play();
         title.innerText = "[" +  lastestPlayed[0].title + "] " + lastestPlayed[0].subtitles[lastestPlayed[1]-1];
         isPlaying = true;
+
+        noSleep = new NoSleep();
         noSleep.enable();
     }
 
@@ -230,19 +244,13 @@ $(document).ready(function() {
         }
     })();
     
-    document.getElementById("reset").onclick = function() {
-        reset();
-    };
-
-    document.getElementById("replay").onclick = function() {
-        play();
-    };
 
     function createDownloadLink() {
         recorder.exportWAV(function(blob) {
             var url = URL.createObjectURL(blob);
-            var div = document.createElement('div');
-            var a = document.createElement('a');
+            var div = document.createElement("div");
+            var a = document.createElement("a");
+            var btnRemove = document.createElement("button");
             var date = new Date();
             var name = date.getFullYear() + '_' + fillZero(2, date.getMonth() + 1) + '_' + fillZero(2, date.getDate() + 1) + '_' + fillZero(2, date.getHours()) + '_' + 
                         fillZero(2, date.getMinutes()) + '_' + fillZero(2, date.getSeconds()) + '_녹화.wav';
@@ -250,11 +258,19 @@ $(document).ready(function() {
             a.href = url;
             a.download = name;
             a.innerText = name;
-            a.className = 'btn';
+            a.className = "btn";
             
-            div.className = 'list-group-item list-group-item-action';
+            btnRemove.innerText = "X"
+            btnRemove.className = "btn btn-light";
+
+            div.className = "list-group-item list-group-item-action d-flex justify-content-between align-items-center";
+
+            btnRemove.onclick = function() {
+                recordingslist.removeChild(div);
+            };
 
             div.appendChild(a);
+            div.appendChild(btnRemove);
             recordingslist.appendChild(div);
         });
     }
@@ -273,56 +289,109 @@ $(document).ready(function() {
         }
     }
 
-    function createAudioContext(stream) {
+    function initAudioContext(stream) {
         audio_context = getAudioContext();
 
         if (audio_context == null) {
             return;
         }
-
-        gumStream = stream;
         
-        var input = audio_context.createMediaStreamSource(stream);
+        mediaStream = stream;
+        input = audio_context.createMediaStreamSource(stream);
         recorder = new Recorder(input, {numChannels:1});
 
         recorder.record();
-        btnRecord.innerText = 'Stop recording';
+        btnRecord.innerText = 'Stop';
         isRecoding = true;
     }
 
     function onError(e) {
         alert(e);
     }
+    
+    function stopRecording() {
+        mediaStream.getAudioTracks()[0].stop();
+        recorder.stop();
+        audio_context.close();
+        // 레코딩 context 삭제하는법?
+
+        btnRecord.innerText = 'Record';
+        location.href = '#recordingslist';
+        isRecoding = false;
+    }
 
     btnRecord.onclick = function() {
         if (isRecoding) {
-            
-            recorder.stop();
-            
             createDownloadLink();
-            btnRecord.innerText = 'Record';
-            location.href = '#recordingslist';
-            isRecoding = false;
+            stopRecording();
         } else {
-            
             if (navigator.mediaDevices) {
                 // supported
                 navigator.mediaDevices.getUserMedia(constraints)
-                        .then(createAudioContext)
+                        .then(initAudioContext)
                         .catch(onError);
             } else if (Modernizr.getusermedia) {
                 // supported
-                Modernizr.prefixed('getUserMedia', navigator)(constraints, createAudioContext, onError);
+                Modernizr.prefixed('getUserMedia', navigator)(constraints, initAudioContext, onError);
             } else {
-                alert("웹 기술 문제로 애플 기기는 Safari로 접속해야함!");
+                alert("웹 기술 문제로 애플 기기는 Safari로 접속해주세요!");
+                return;
             }
         }
     };
+
+    player.onplay = function() {
+        $('#loading').modal({backdrop: 'static', keyboard: false});
+        clearTimeout(timer2);
+    };
+
+    player.onplaying = function() {
+
+        let duration = (player.duration - 4) * 1000;
+
+        if (play_for_twice.checked && playCount == 0) {
+            ++playCount;
+
+            timer = setTimeout(function() {
+                player.currentTime = 0;
+                player.play();
+            }, duration);
+        } else {
+            btnPause.removeAttribute("disabled");
     
-    player.onended = function() {
-        startTime = Date.now();
-        tick();
-    }
+            startTime = Date.now() + duration;
+            timer = setTimeout(tick, duration);
+            timer2 = setTimeout(function() { $('#loading').modal('hide'); }, duration);
+        }
+    };
+    
+
+    btnResest.onclick = function() { reset(); };
+    btnReplay.onclick = function() { if (lastestPlayed != null) play(); };
+
+    btnPause.onclick = function() {
+        if (isPlaying == true) {
+            if (timer != 0) {
+                clearTimeout(timer);
+                timer = 0;
+                btnPause.innerText = "Start";
+
+                // 녹화 중이면 마찬가지로 잠시 중지
+                if (isRecoding) {
+                    mediaStream.getAudioTracks()[0].enabled == false;
+                }
+
+            } else {
+                timer = setTimeout(tick, 10);
+                btnPause.innerText = "Pause";
+
+                // 녹화 중이면 마찬가지로 다시 재개
+                if (isRecoding) {
+                    mediaStream.getAudioTracks()[0].enabled == true;
+                }
+            }
+        }
+    };
 
 });
 
