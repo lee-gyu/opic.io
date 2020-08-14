@@ -360,9 +360,8 @@ $(document).ready(function() {
         }
     };
 
-    player.onpause = function() { clearTimers(); };
-    player.onended = function() { timer = setTimeout(tick, 10); };
     player.onplaying = function() {
+
         let duration = ((player.duration - player.currentTime) - 4) * 1000;
 
         if (play_for_twice.checked && playCount == 0) {
