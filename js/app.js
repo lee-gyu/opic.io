@@ -117,7 +117,7 @@ $(document).ready(function() {
         noSleep = new NoSleep();
         noSleep.enable();
 
-        $('#loading').modal();
+        $('#loading').modal({backdrop: 'static', keyboard: false});
         clearTimeout(timer2);
     }
 
