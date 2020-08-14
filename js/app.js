@@ -66,9 +66,9 @@ $(document).ready(function() {
         ],
 
         [
-            newObj("에바에게 묻기", "RA", 7, ["가족에 대해", "하버드 대학교", "이사갔음", "영화", "수영", "밴쿠버", "도서관"]),
-            newObj("문의", "RB", 13, ["백화점 옷", "수업 문의", "상사에게 프로젝트 묻기", "친구에게 MP3 묻기", "요리 재료 점원에게 묻기", "카페 메뉴 묻기", "비행기 지연 문의", "해외여행 문의", "등록마감 수업 문의", "회사 동료에게 신제품 문의", "영화관람 문의", "헬스장 문의", "병원 진료 문의"]),
-            newObj("해결/대안", "RC", 5, ["시험 못보는 상황", "회의 참석 못함", "영화 표 잘못 끊음", "비행기 취소 상황", "구매 제품 손상"]),
+            newObj("에바에게 묻기", "RA", 5, ["가족에 대해", "이사갔음", "영화", "밴쿠버", "도서관"]),
+            newObj("문의", "RB", 8, ["백화점 옷", "친구에게 MP3 묻기", "요리 재료 점원에게 묻기", "카페 메뉴 묻기", "비행기 지연 문의", "해외여행 문의", "영화관람 문의", "병원 진료 문의"]),
+            newObj("해결/대안", "RC", 3, ["영화 표 잘못 끊음", "비행기 취소 상황", "구매 제품 손상"]),
         ]
 
     ];
@@ -312,7 +312,8 @@ $(document).ready(function() {
     }
 
     function onError(e) {
-        alert(e);
+        console.error(e);
+        alert("녹화를 위해서 마이크 사용을 허용해주세요!");
     }
     
     function stopRecording() {
@@ -362,7 +363,7 @@ $(document).ready(function() {
 
     player.onplaying = function() {
 
-        let duration = ((player.duration - player.currentTime) - 4) * 1000;
+        let duration = (player.duration - player.currentTime) * 1000;
 
         if (play_for_twice.checked && playCount == 0) {
             ++playCount;
