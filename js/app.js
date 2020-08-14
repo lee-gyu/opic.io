@@ -382,6 +382,7 @@ $(document).ready(function() {
                 }
 
             } else {
+                startTime = Date.now();
                 timer = setTimeout(tick, 10);
                 btnPause.innerText = "Pause";
 
