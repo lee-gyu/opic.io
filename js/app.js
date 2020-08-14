@@ -368,6 +368,7 @@ $(document).ready(function() {
             ++playCount;
 
             timer = setTimeout(function() {
+                player.pause();
                 player.currentTime = 0;
                 player.play();
             }, duration);
