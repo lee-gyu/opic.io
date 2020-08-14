@@ -16,11 +16,11 @@
     - IOS Safari 호환성 때문에 고생함..
 
 - 사용된 라이브러리 및 프레임워크
-    - JQuery (https://jquery.com/)
-    - Bootstrap (https://getbootstrap.com/)
-    - NoSleep (https://github.com/richtr/NoSleep.js/)
-    - Recorderjs (https://github.com/mattdiamond/Recorderjs)
-    - Modernizr (https://modernizr.com/)
+    - JQuery (https://jquery.com/) - MIT License
+    - Bootstrap (https://getbootstrap.com/) - MIT License
+    - NoSleep (https://github.com/richtr/NoSleep.js/) - MIT License
+    - Recorderjs (https://github.com/mattdiamond/Recorderjs) - MIT License
+    - Modernizr (https://modernizr.com/) - MIT License
 
 - 주요 기능
     - 타이머 기능 (일시정지, 리플레이 포함)
