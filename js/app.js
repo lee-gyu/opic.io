@@ -12,6 +12,7 @@ $(document).ready(function() {
     const btnReplay = document.getElementById("replay");
     const recordingslist = document.getElementById("recordingslist");
     const play_for_twice = document.getElementById("play_for_twice");
+    const random_buttons = [document.getElementById("random1"), document.getElementById("random2"), document.getElementById("random3")];
     
     var startTime = 0;
     var timer = 0;
@@ -133,7 +134,7 @@ $(document).ready(function() {
             let btn = document.createElement("button");
             let tmp = i + 1;
 
-            btn.className = "list-group-item list-group-item-action btn";
+            btn.className = "list-group-item list-group-item-action";
             btn.innerHTML = "질문" + (i + 1);
 
             if (obj.subtitles.length > 0) {
@@ -330,6 +331,15 @@ $(document).ready(function() {
         clearTimeout(timer2);
     };
 
+    function playRandom(id) {
+        var r1 = parseInt(Math.random() * items[id].length);
+        var r2 = parseInt(Math.random() * items[id][r1].length);
+
+        lastestPlayed = [items[id][r1], 1 + r2];
+
+        play();
+    }
+
     btnRecord.onclick = function() {
         if (isRecoding) {
             createDownloadLink();
@@ -399,6 +409,10 @@ $(document).ready(function() {
             }
         }
     };
+
+    random_buttons.forEach(function(e, id) {
+        e.onclick = function() { playRandom(id + 1); };
+    });
 
 });
 
