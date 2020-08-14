@@ -17,6 +17,7 @@ $(document).ready(function() {
     var timer = 0;
     var timer2 = 0;
     var playCount = 0;
+    var timeDiff = 0;
     var isPlaying = false;
     var isRecoding = false;
     var lastestPlayed = null;
@@ -113,6 +114,9 @@ $(document).ready(function() {
 
         noSleep = new NoSleep();
         noSleep.enable();
+
+        $('#loading').modal({backdrop: 'static', keyboard: false});
+        clearTimeout(timer2);
     }
 
     function createCardBody(obj) {
@@ -340,11 +344,6 @@ $(document).ready(function() {
         }
     };
 
-    player.onplay = function() {
-        $('#loading').modal({backdrop: 'static', keyboard: false});
-        clearTimeout(timer2);
-    };
-
     player.onplaying = function() {
 
         let duration = (player.duration - 4) * 1000;
@@ -365,7 +364,6 @@ $(document).ready(function() {
         }
     };
     
-
     btnResest.onclick = function() { reset(); };
     btnReplay.onclick = function() { if (lastestPlayed != null) play(); };
 
@@ -375,6 +373,7 @@ $(document).ready(function() {
                 clearTimeout(timer);
                 timer = 0;
                 btnPause.innerText = "Start";
+                timeDiff = Date.now() - startTime;
 
                 // 녹화 중이면 마찬가지로 잠시 중지
                 if (isRecoding) {
@@ -382,7 +381,7 @@ $(document).ready(function() {
                 }
 
             } else {
-                startTime = Date.now();
+                startTime = Date.now() - timeDiff;
                 timer = setTimeout(tick, 10);
                 btnPause.innerText = "Pause";
 
