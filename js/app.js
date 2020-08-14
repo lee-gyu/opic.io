@@ -351,7 +351,7 @@ $(document).ready(function() {
     };
 
     player.onpause = function() { clearTimers(); };
-
+    player.onended = function() { timer = setTimeout(tick, 10); };
     player.onplaying = function() {
         let duration = ((player.duration - player.currentTime) - 4) * 1000;
 
@@ -377,7 +377,7 @@ $(document).ready(function() {
     btnPause.onclick = function() {
         if (isPlaying == true) {
             if (timer != 0) {
-                clearTimeout(timer);
+                clearTimers();
                 timer = 0;
                 btnPause.innerText = "Start";
                 timeDiff = Date.now() - startTime;
