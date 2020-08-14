@@ -87,7 +87,8 @@ $(document).ready(function() {
         playCount = 0;
         
         player.pause();
-        clearTimeout(timer);
+        clearTimers();
+        
         timerLabel.innerHTML = "00:00.000";
         btnPause.innerHTML = "Pause";
         timerLabel.className = "";
@@ -324,6 +325,11 @@ $(document).ready(function() {
         isRecoding = false;
     }
 
+    function clearTimers() {
+        clearTimeout(timer);
+        clearTimeout(timer2);
+    };
+
     btnRecord.onclick = function() {
         if (isRecoding) {
             createDownloadLink();
@@ -344,9 +350,10 @@ $(document).ready(function() {
         }
     };
 
-    player.onplaying = function() {
+    player.onpause = function() { clearTimers(); };
 
-        let duration = (player.duration - 4) * 1000;
+    player.onplaying = function() {
+        let duration = ((player.duration - player.currentTime) - 4) * 1000;
 
         if (play_for_twice.checked && playCount == 0) {
             ++playCount;
