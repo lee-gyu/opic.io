@@ -88,7 +88,7 @@ $(document).ready(function() {
         
         player.pause();
         clearTimers();
-        
+
         timerLabel.innerHTML = "00:00.000";
         btnPause.innerHTML = "Pause";
         timerLabel.className = "";
@@ -116,7 +116,7 @@ $(document).ready(function() {
         noSleep = new NoSleep();
         noSleep.enable();
 
-        $('#loading').modal({backdrop: 'static', keyboard: false});
+        $('#loading').modal();
         clearTimeout(timer2);
     }
 
