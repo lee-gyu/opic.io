@@ -14,3 +14,22 @@
     animation-iteration-count: infinite;
     animation-direction: alternate;
 }
+
+#nav {
+    text-align: center;
+}
+
+.nav-link {
+    padding: 0.5rem 1rem;
+    background-color: #777;
+    border-color: #fff;
+}
+
+.nav-link.active{
+    color: black;
+    font-weight: bold;
+}
+
+.custom-select {
+    max-width: 10rem;
+}

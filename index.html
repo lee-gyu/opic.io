@@ -10,66 +10,79 @@
     </head>
 
     <body>
-        <nav class="container fixed-top" style="text-align: center; padding-top: 20px; padding-bottom: 20px; z-index: 10; background-color: #222;">
-            <div style="text-align: center;">
-                <h3>LET'S PRACTICE!!</h3>
-                <h6 id="title">-</h6>
-            </div>
-            <div id="timer" style="font-size: 4em;">
-                00:00.000
-            </div>
+        <div class="container" style="display: flex; flex-flow: column; height: 100%;">
 
-            <div class="progress mb-3">
-                <div id="progress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
+            <header class="mt-3" id="nav">
+                <div class="text-center">
+                    <h3>OPIC STUDY!</h3>
+                    <h6 id="title">-</h6>
+                </div>
+                <h2 class="text-center" id="timer">
+                    00:00.000
+                </h2>
+    
+                <div class="mb-3 text-center">
+                    <select class="col-4 custom-select" id="play_count">
+                        <option value="1">1회 재생</option>
+                        <option value="2">2회 재생</option>
+                    </select>
 
-            <div class="form-check mb-3">
-                <input type="checkbox" class="form-check-input" id="play_for_twice">
-                <label class="form-check-label" for="play_for_twice">질문 2회 연속 자동 재생</label>
-            </div>
+                    <select class="col-4 custom-select" id="play_speed">
+                        <option value="1">느리게</option>
+                        <option value="2" selected>보통 속도</option>
+                        <option value="3">빠르게</option>
+                    </select>
+                </div>
+    
+                <div class="mb-3 text-center">
+                    <div class="btn-group">
+                        <button id="reset" class="btn btn-primary btn-lg">
+                            Reset
+                        </button>
+                        <button id="replay" class="btn btn-secondary btn-lg">
+                            Replay
+                        </button>
+                        <button id="pause" class="btn btn-info btn-lg" disabled>
+                            Pause
+                        </button>
+                        <button id="record" class="btn btn-danger btn-lg">
+                            Record
+                        </button>
+                    </div>
+                </div>
 
-            <div class="btn-group">
-                <button id="reset" class="btn btn-primary btn-lg">
-                    Reset
-                </button>
-                <button id="replay" class="btn btn-secondary btn-lg">
-                    Replay
-                </button>
-                <button id="pause" class="btn btn-info btn-lg">
-                    Pause
-                </button>
-                <button id="record" class="btn btn-danger btn-lg">
-                    Record
-                </button>
-            </div>
-
-        </nav>
+                <div class="progress mb-3">
+                    <div id="progress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </header>
+            
+            <main id="main" role="main" style="flex: 1; overflow: auto;">
+                
+                <div id="items5">
+                    <h4>랜덤뽑기</h4>
+                    <div class="list-group">
+                        <button class="list-group-item list-group-item-action" id="random1">선택주제</button>
+                        <button class="list-group-item list-group-item-action" id="random2">돌발주제</button>
+                        <button class="list-group-item list-group-item-action" id="random3">롤플레잉</button>
+                    </div>
+                </div>
         
-        <main class="container" style="margin-top: 320px" id="main" role="main" class="mb-3">
-        </main>
+                <div class="mt-3">
+                    <div class="list-group" id="recordingslist"></div>
+                </div>
+            </main>
+    
+            <footer class="mb-1 mt-1">
+                ※ 모든 mp3 파일은 <a target="_blank" href="http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9791158551988&orderClick=LEa&Kc=">해커스 OPIC START Intermediate 교재</a> 첨부 파일입니다.
+                <a href="https://github.com/GyuCheol/opic.io" target="_blank">(소스 코드 보기)</a>
+            </footer>
 
-        <div class="container mt-3">
-            <h4>랜덤뽑기</h4>
-            <div class="list-group">
-                <button class="list-group-item list-group-item-action" id="random1">선택주제</button>
-                <button class="list-group-item list-group-item-action" id="random2">돌발주제</button>
-                <button class="list-group-item list-group-item-action" id="random3">롤플레잉</button>
-            </div>
         </div>
-
-        <div class="container mt-3">
-            <div class="list-group" id="recordingslist"></div>
-        </div>
-
-        <footer class="container mb-5 mt-3">
-            ※ 모든 mp3 파일은 <a target="_blank" href="http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9791158551988&orderClick=LEa&Kc=">해커스 OPIC START Intermediate 교재</a> 첨부 파일입니다.
-            <a href="https://github.com/GyuCheol/opic.io" target="_blank">(소스 코드 보기)</a>
-        </footer>
 
         <div class="modal" id="loading" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    <div class="modal-body" style="text-align: center;">
+                    <div class="modal-body text-center">
                         Eva가 질문 중...
                     </div>
                 </div>

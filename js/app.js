@@ -1,6 +1,4 @@
-
-
-$(document).ready(function() {
+(function() {
     const constraints = { audio: true, video:false };
     const player = new Audio();
     
@@ -10,8 +8,10 @@ $(document).ready(function() {
     const btnPause = document.getElementById("pause");
     const btnResest = document.getElementById("reset");
     const btnReplay = document.getElementById("replay");
+    const main = document.getElementById("main");
     const recordingslist = document.getElementById("recordingslist");
-    const play_for_twice = document.getElementById("play_for_twice");
+    const play_count = document.getElementById("play_count");
+    const play_speed = document.getElementById("play_speed");
     const random_buttons = [document.getElementById("random1"), document.getElementById("random2"), document.getElementById("random3")];
     
     var startTime = 0;
@@ -92,7 +92,7 @@ $(document).ready(function() {
 
         timerLabel.innerHTML = "00:00.000";
         btnPause.innerHTML = "Pause";
-        timerLabel.className = "";
+        timerLabel.classList.remove("time-label-blink");
         startTime = Date.now();
         isPlaying = false;
         timer = 0;
@@ -117,6 +117,7 @@ $(document).ready(function() {
         noSleep = new NoSleep();
         noSleep.enable();
 
+        btnPause.removeAttribute("disabled");
         $('#loading').modal({backdrop: 'static', keyboard: false});
         clearTimeout(timer2);
     }
@@ -201,22 +202,22 @@ $(document).ready(function() {
         var seconds = parseInt((diff / 1000) % 60);
         var minutes = parseInt((diff / 1000) / 60);
         var totalSeconds = parseInt(diff / 1000);
-        var className = '';
+        var className = "";
 
-        timerLabel.innerHTML = fillZero(2, minutes) + ':' + fillZero(2, seconds) + '.' + fillZero(3, ms);
+        timerLabel.innerHTML = fillZero(2, minutes) + ":" + fillZero(2, seconds) + "." + fillZero(3, ms);
 
         if (totalSeconds <= 50) {
-            className = 'progress-bar progress-bar-striped progress-bar-animated bg-info';
+            className = "progress-bar progress-bar-striped progress-bar-animated bg-info";
         } else if (totalSeconds <= 70) {
-            className = 'progress-bar progress-bar-striped progress-bar-animated bg-success';
+            className = "progress-bar progress-bar-striped progress-bar-animated bg-success";
         } else if (totalSeconds <= 110) {
-            className = 'progress-bar progress-bar-striped progress-bar-animated bg-warning';
+            className = "progress-bar progress-bar-striped progress-bar-animated bg-warning";
         } else {
-            className = 'progress-bar progress-bar-striped progress-bar-animated bg-danger';
+            className = "progress-bar progress-bar-striped progress-bar-animated bg-danger";
         }
 
-        if (totalSeconds >= 110 && timerLabel.className == '') {
-            timerLabel.className = 'time-label-blink';
+        if (totalSeconds >= 110 && timerLabel.classList.contains("time-label-blink") == false) {
+            timerLabel.classList.add("time-label-blink");
         }
 
         if (className != progress.className) {
@@ -231,25 +232,6 @@ $(document).ready(function() {
 
         timer = setTimeout(tick, 35);
     }
-
-    (function init() {
-        for (let i = 0; i < items.length; ++i) {
-            let container = document.createElement("div");
-            let header = document.createElement("h4");
-
-            container.className = "accordion mt-3";
-            header.innerText = headers[i];
-
-            container.appendChild(header);
-            
-            for (let j = 0; j < items[i].length; ++j) {
-                container.appendChild(createCardContainer(items[i][j]));
-            }
-
-            document.getElementById("main").appendChild(container);
-        }
-    })();
-    
 
     function createDownloadLink() {
         recorder.exportWAV(function(blob) {
@@ -362,10 +344,21 @@ $(document).ready(function() {
     };
 
     player.onplaying = function() {
+        let duration = player.duration;
+        let speed = 1;
+        
+        if (play_speed.value == "1") {
+            speed = 0.75;
+        } else if (play_speed.value == "3") {
+            speed = 1.5;
+            duration += 2;
+        }
+        
+        player.playbackRate = speed;
+        duration += (player.duration * (1-speed));
+        duration *= 1000;
 
-        let duration = (player.duration - player.currentTime) * 1000;
-
-        if (play_for_twice.checked && playCount == 0) {
+        if (play_count.value == "2" && playCount == 0) {
             ++playCount;
 
             timer = setTimeout(function() {
@@ -374,8 +367,6 @@ $(document).ready(function() {
                 player.play();
             }, duration);
         } else {
-            btnPause.removeAttribute("disabled");
-    
             startTime = Date.now() + duration;
             timer = setTimeout(tick, duration);
             timer2 = setTimeout(function() { $('#loading').modal('hide'); }, duration);
@@ -415,7 +406,25 @@ $(document).ready(function() {
         e.onclick = function() { playRandom(id + 1); };
     });
 
-});
+    (function() {
+        for (let i = 0; i < items.length; ++i) {
+            let container = document.createElement("div");
+            let header = document.createElement("h4");
 
+            container.className = "accordion mb-3";
+            container.id = "items" + (i + 1);
+            header.innerText = headers[i];
 
+            container.appendChild(header);
+            
+            for (let j = 0; j < items[i].length; ++j) {
+                container.appendChild(createCardContainer(items[i][j], i));
+            }
 
+            main.insertBefore(container, document.getElementById("items5"));
+        }
+
+        // $('#main').scrollspy({ target: '#nav', offset: 370 })
+    })();
+
+})();
