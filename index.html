@@ -21,17 +21,15 @@
                     00:00.000
                 </h2>
     
-                <div class="mb-3 text-center">
-                    <select class="col-4 custom-select" id="play_count">
-                        <option value="1">1회 재생</option>
-                        <option value="2">2회 재생</option>
-                    </select>
-
-                    <select class="col-4 custom-select" id="play_speed">
-                        <option value="1">느리게</option>
-                        <option value="2" selected>보통 속도</option>
-                        <option value="3">빠르게</option>
-                    </select>
+                <div class="text-center">
+                    <input id="play_for_twice" type="checkbox" />
+                    <label class="mr-3" for="play_for_twice">2회 재생</label>
+                    <input id="speed1" type="radio" name="play_speed" />
+                    <label class="mr-1" for="speed1">느리게</label>
+                    <input id="speed2" type="radio" name="play_speed" checked/>
+                    <label class="mr-1" for="speed2">보통</label>
+                    <input id="speed3" type="radio" name="play_speed" />
+                    <label for="speed3">빠르게</label>
                 </div>
     
                 <div class="mb-3 text-center">

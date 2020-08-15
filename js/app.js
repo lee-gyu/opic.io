@@ -10,13 +10,12 @@
     const btnReplay = document.getElementById("replay");
     const main = document.getElementById("main");
     const recordingslist = document.getElementById("recordingslist");
-    const play_count = document.getElementById("play_count");
-    const play_speed = document.getElementById("play_speed");
+    const play_for_twice = document.getElementById("play_for_twice");
+    const play_speed = [document.getElementById("speed1"), document.getElementById("speed2"), document.getElementById("speed3")];
     const random_buttons = [document.getElementById("random1"), document.getElementById("random2"), document.getElementById("random3")];
     
     var startTime = 0;
     var timer = 0;
-    var timer2 = 0;
     var playCount = 0;
     var timeDiff = 0;
     var isPlaying = false;
@@ -93,9 +92,7 @@
         timerLabel.innerHTML = "00:00.000";
         btnPause.innerHTML = "Pause";
         timerLabel.classList.remove("time-label-blink");
-        startTime = Date.now();
         isPlaying = false;
-        timer = 0;
 
         progress.style.width = "0%";
         title.innerText = "-";
@@ -106,10 +103,21 @@
         }
     }
 
+    function getSoundSpeed() {
+        if (play_speed[0].checked) {
+            return 0.75;
+        } else if (play_speed[2].checked) {
+            return 1.5;
+        } else {
+            return 1;
+        }
+    }
+
     function play() {
         reset();
 
         player.src = "./mp3/" + lastestPlayed[0].mp3 + lastestPlayed[1] + ".mp3";
+        player.playbackRate = getSoundSpeed();
         player.play();
         title.innerText = "[" +  lastestPlayed[0].title + "] " + lastestPlayed[0].subtitles[lastestPlayed[1]-1];
         isPlaying = true;
@@ -119,7 +127,6 @@
 
         btnPause.removeAttribute("disabled");
         $('#loading').modal({backdrop: 'static', keyboard: false});
-        clearTimeout(timer2);
     }
 
     function createCardBody(obj) {
@@ -311,7 +318,8 @@
 
     function clearTimers() {
         clearTimeout(timer);
-        clearTimeout(timer2);
+
+        timer = 0;
     };
 
     function playRandom(id) {
@@ -343,33 +351,17 @@
         }
     };
 
-    player.onplaying = function() {
-        let duration = player.duration;
-        let speed = 1;
-        
-        if (play_speed.value == "1") {
-            speed = 0.75;
-        } else if (play_speed.value == "3") {
-            speed = 1.5;
-            duration += 2;
-        }
-        
-        player.playbackRate = speed;
-        duration += (player.duration * (1-speed));
-        duration *= 1000;
-
-        if (play_count.value == "2" && playCount == 0) {
+    player.onended = function() {
+        if (play_for_twice.checked && playCount == 0) {
             ++playCount;
 
-            timer = setTimeout(function() {
-                player.pause();
-                player.currentTime = 0;
-                player.play();
-            }, duration);
+            player.pause();
+            player.currentTime = 0;
+            player.play();
         } else {
-            startTime = Date.now() + duration;
-            timer = setTimeout(tick, duration);
-            timer2 = setTimeout(function() { $('#loading').modal('hide'); }, duration);
+            startTime = Date.now();
+            tick()
+            $('#loading').modal('hide');
         }
     };
     
@@ -380,7 +372,6 @@
         if (isPlaying == true) {
             if (timer != 0) {
                 clearTimers();
-                timer = 0;
                 btnPause.innerText = "Start";
                 timeDiff = Date.now() - startTime;
 
