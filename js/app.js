@@ -8,6 +8,7 @@
     const btnPause = document.getElementById("pause");
     const btnResest = document.getElementById("reset");
     const btnReplay = document.getElementById("replay");
+    const progress = document.getElementById("progress");
     const main = document.getElementById("main");
     const recordingslist = document.getElementById("recordingslist");
     const play_for_twice = document.getElementById("play_for_twice");
@@ -89,12 +90,14 @@
         player.pause();
         clearTimers();
 
-        timerLabel.innerHTML = "00:00.000";
+        timerLabel.innerHTML = "02:00.000";
         btnPause.innerHTML = "Pause";
         timerLabel.classList.remove("time-label-blink");
         isPlaying = false;
 
-        progress.style.width = "0%";
+        progress.className = "progress-bar progress-bar-striped progress-bar-animated bg-info";
+        progress.style.width = "100%";
+        progress.style.width = "100%";
         title.innerText = "-";
         btnPause.setAttribute("disabled", '');
 
@@ -205,25 +208,32 @@
 
     function tick() {
         var diff = parseInt(Date.now() - startTime)
-        var ms = diff % 1000;
-        var seconds = parseInt((diff / 1000) % 60);
-        var minutes = parseInt((diff / 1000) / 60);
-        var totalSeconds = parseInt(diff / 1000);
+        var timeLeft = (120 * 1000) - diff;
+        var ms = timeLeft % 1000;
+        var seconds = parseInt((timeLeft / 1000) % 60);
+        var minutes = parseInt((timeLeft / 1000) / 60);
+        var totalSeconds = Math.round(timeLeft / 500) / 2;
         var className = "";
 
-        timerLabel.innerHTML = fillZero(2, minutes) + ":" + fillZero(2, seconds) + "." + fillZero(3, ms);
-
-        if (totalSeconds <= 50) {
-            className = "progress-bar progress-bar-striped progress-bar-animated bg-info";
-        } else if (totalSeconds <= 70) {
-            className = "progress-bar progress-bar-striped progress-bar-animated bg-success";
-        } else if (totalSeconds <= 110) {
-            className = "progress-bar progress-bar-striped progress-bar-animated bg-warning";
+        if (timeLeft >= 0) {
+            timerLabel.innerHTML = fillZero(2, minutes) + ":" + fillZero(2, seconds) + "." + fillZero(3, ms);
         } else {
-            className = "progress-bar progress-bar-striped progress-bar-animated bg-danger";
+            progress.style.width = "0%";
+            timerLabel.innerHTML = "00:00:000";
+            return;
         }
 
-        if (totalSeconds >= 110 && timerLabel.classList.contains("time-label-blink") == false) {
+        if (totalSeconds >= 70) {
+            className = "progress-bar progress-bar-striped bg-info";
+        } else if (totalSeconds >= 40) {
+            className = "progress-bar progress-bar-striped bg-success";
+        } else if (totalSeconds > 15) {
+            className = "progress-bar progress-bar-striped bg-warning";
+        } else {
+            className = "progress-bar progress-bar-striped bg-danger";
+        }
+
+        if (totalSeconds <= 15 && timerLabel.classList.contains("time-label-blink") == false) {
             timerLabel.classList.add("time-label-blink");
         }
 
@@ -231,13 +241,13 @@
             progress.className = className;
         }
 
-        var percent = (Math.min(totalSeconds / 120, 1) * 100) + '%';
+        var percent = (Math.max(totalSeconds / 120, 0) * 100) + '%';
 
         if (progress.style.width != percent) {
             progress.style.width = percent;
         }
 
-        timer = setTimeout(tick, 35);
+        timer = setTimeout(tick, 53);
     }
 
     function createDownloadLink() {
