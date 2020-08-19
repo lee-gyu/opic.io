@@ -36,24 +36,25 @@
         ],
 
         [
-            newObj("아파트", "O_APT", 4, ["동네 묘사", "이웃 소개", "동네 경험 설명", "동네 과거 현재 비교"]),
-            newObj("집", "O_H", 4, ["우리 집 묘사", "내 방 묘사", "집에서 가족과 시간 보내기", "최근 변화"]),
-            newObj("조깅", "O_JOG", 4, ["조깅 루틴", "부상 피하기, 조깅용 아이템", "언제부터 걸었니", "특별한 경험"]),
-            newObj("영화", "O_MOV", 4, ["좋아하는 영화", "좋아하는 배우", "영화 루틴", "기억에 남는 영화"]),
-            newObj("카페", "O_CAFE", 4, ["좋아하는 카페 묘사", "카페 뭐하러 누구랑가", "특별한 경험", "처음으로 갔던 카페간 날"]),
-            newObj("음악", "O_MUSIC", 4, ["좋아하는 음악/가수", "언제 음악 듣니", "좋아하는 음악 변천사", "특별한 경험"]),
+            newObj("집", "O_H", 4, ["집 묘사", "나의 방 묘사", "가족과 시간", "최근 변화"]),
+            newObj("동네 & 이웃", "O_APT", 4, ["묘사", "이웃", "특별한 경험", "과거/현재 비교"]),
+            newObj("영화", "O_MOV", 4, ["좋아하는 영화", "좋아하는 배우", "루틴", "기억에 남는 영화"]),
+
             newObj("여행", "O_TRIP", 4, ["좋아하는 국내여행", "여행 시 챙기는 것", "첫 해외여행 경험", "기억에 남는 여행 경험"]),
-            newObj("콘서트", "O_CONT", 4, ["최근 갔던 콘서트 설명", "어떤 공연장 좋니", "어딜 자주 가니, 누구랑", "특별한 경험, 공연자"]),
             newObj("공원", "O_PARK", 4, ["좋아하는 공원 설명", "공원에서 놀면 뭐하니?", "얼마나 자주 가니, 누구랑?", "특별한 경험"]),
             newObj("해변", "O_BEACH", 4, ["좋아하는 해변 설명", "해변갈 때 챙기는 아이템", "캠핑?", "캠핑 때 특별한 경험"]),
+            newObj("음악", "O_MUSIC", 4, ["좋아하는 음악/가수", "언제 음악 듣니", "좋아하는 음악 변천사", "특별한 경험"]),
+            newObj("콘서트", "O_CONT", 4, ["최근 갔던 콘서트 설명", "어떤 공연장 좋니", "어딜 자주 가니, 누구랑", "특별한 경험, 공연자"]),
+            newObj("카페", "O_CAFE", 4, ["좋아하는 카페 묘사", "카페 뭐하러 누구랑가", "특별한 경험", "처음으로 갔던 카페간 날"]),
+            newObj("조깅", "O_JOG", 4, ["조깅 루틴", "부상 피하기, 조깅용 아이템", "언제부터 걸었니", "특별한 경험"]),
         ],
 
         [
+            newObj("은행", "P_BANK", 3, ["사람들은 왜 은행가", "은행 묘사", "은행 경험 이야기 해줘"]),
             newObj("집안일", "P_HOUSEWORK", 3, ["집안일 설명", "가족 구성원의 각 역할", "하지 못한 경험"]),
             newObj("식당", "P_REST", 3, ["어떤 음식이 나오니", "네 나라 전통 음식", "최근에 식당간 경험"]),
             newObj("인터넷", "P_INTERNET", 3, ["인터넷 쓰는게 왜 좋니", "무슨 SW 쓰니", "첨에 인터넷 쓴 경험"]),
             newObj("도서관", "P_LIB", 3, ["도서관에서 문제 있었니", "주로 가는 도서관 묘사", "최근에 간 도서관"]),
-            newObj("은행", "P_BANK", 3, ["사람들은 왜 은행가", "은행 묘사", "은행 경험 이야기 해줘"]),
             newObj("재활용", "P_RECYCLE", 3, ["재활용 시스템 설명해봐라", "어떻게 집에서 재활용하니, 절차 설명", "재활용하면서 특별한 경험"]),
             newObj("교통", "P_TRANSIT", 3, ["대중교통 설명", "대중교통 과거/현재 변화", "가끔 대중교통 불편, 문제가 됐던 경험"]),
             newObj("가구", "P_FURNITURE", 3, ["좋아하는 가구", "최근에 산 가구", "전기 관련해서 문제가 생겼고, 어떻게 해결했니?"]),
@@ -66,9 +67,9 @@
         ],
 
         [
-            newObj("에바에게 묻기", "RA", 5, ["가족에 대해", "이사갔음", "영화", "밴쿠버", "도서관"]),
-            newObj("문의", "RB", 8, ["백화점 옷", "친구에게 MP3 묻기", "요리 재료 점원에게 묻기", "카페 메뉴 묻기", "비행기 지연 문의", "해외여행 문의", "영화관람 문의", "병원 진료 문의"]),
-            newObj("해결/대안", "RC", 3, ["영화 표 잘못 끊음", "비행기 취소 상황", "구매 제품 손상"]),
+            newObj("친구에게 묻기", "RA", 5, ["가족에 대해", "이사갔음", "영화", "밴쿠버", "도서관"]),
+            newObj("서비스 문의", "RB", 8, ["백화점 옷", "친구에게 MP3 묻기", "요리 재료 점원에게 묻기", "카페 메뉴 묻기", "비행기 지연 문의", "해외여행 문의", "영화관람 문의", "병원 진료 문의"]),
+            newObj("문제 해결/대안 제시", "RC", 3, ["영화 표 잘못 끊음", "비행기 취소 상황", "구매 제품 손상"]),
         ]
 
     ];
@@ -91,15 +92,15 @@
         clearTimers();
 
         timerLabel.innerHTML = "02:00.000";
-        btnPause.innerHTML = "Pause";
+        btnPause.innerHTML = "Start";
         timerLabel.classList.remove("time-label-blink");
         isPlaying = false;
+        timeDiff = 0;
 
         progress.className = "progress-bar progress-bar-striped progress-bar-animated bg-info";
         progress.style.width = "100%";
         progress.style.width = "100%";
         title.innerText = "-";
-        btnPause.setAttribute("disabled", '');
 
         if (noSleep != null && noSleep._wakeLock != null) {
             noSleep.disable();
@@ -128,7 +129,6 @@
         noSleep = new NoSleep();
         noSleep.enable();
 
-        btnPause.removeAttribute("disabled");
         $('#loading').modal({backdrop: 'static', keyboard: false});
     }
 
@@ -341,6 +341,33 @@
         play();
     }
 
+    function pause() {
+        if (timerLabel.innerText == '02:00:000') {
+            startTime = Date.now();
+        }
+
+        if (timer != 0) {
+            clearTimers();
+            btnPause.innerText = "Start";
+            timeDiff = Date.now() - startTime;
+
+            // 녹화 중이면 마찬가지로 잠시 중지
+            if (isRecoding) {
+                mediaStream.getAudioTracks()[0].enabled == false;
+            }
+
+        } else {
+            startTime = Date.now() - timeDiff;
+            timer = setTimeout(tick, 10);
+            btnPause.innerText = "Pause";
+
+            // 녹화 중이면 마찬가지로 다시 재개
+            if (isRecoding) {
+                mediaStream.getAudioTracks()[0].enabled == true;
+            }
+        }
+    }
+
     btnRecord.onclick = function() {
         if (isRecoding) {
             createDownloadLink();
@@ -370,38 +397,14 @@
             player.play();
         } else {
             startTime = Date.now();
-            tick()
+            pause();
             $('#loading').modal('hide');
         }
     };
     
     btnResest.onclick = function() { reset(); };
     btnReplay.onclick = function() { if (lastestPlayed != null) play(); };
-
-    btnPause.onclick = function() {
-        if (isPlaying == true) {
-            if (timer != 0) {
-                clearTimers();
-                btnPause.innerText = "Start";
-                timeDiff = Date.now() - startTime;
-
-                // 녹화 중이면 마찬가지로 잠시 중지
-                if (isRecoding) {
-                    mediaStream.getAudioTracks()[0].enabled == false;
-                }
-
-            } else {
-                startTime = Date.now() - timeDiff;
-                timer = setTimeout(tick, 10);
-                btnPause.innerText = "Pause";
-
-                // 녹화 중이면 마찬가지로 다시 재개
-                if (isRecoding) {
-                    mediaStream.getAudioTracks()[0].enabled == true;
-                }
-            }
-        }
-    };
+    btnPause.onclick = pause;
 
     random_buttons.forEach(function(e, id) {
         e.onclick = function() { playRandom(id + 1); };
