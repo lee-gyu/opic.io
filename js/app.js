@@ -1,3 +1,8 @@
+/// <reference path="./jquery-3.5.1.min.js"/>
+/// <reference path="./NoSleep.min.js"/>
+/// <reference path="./recorder.js"/>
+/// <reference path="./modernizr-custom.js"/>
+
 (function() {
     const constraints = { audio: true, video:false };
     const player = new Audio();
@@ -22,6 +27,7 @@
     var isPlaying = false;
     var isRecoding = false;
     var lastestPlayed = null;
+
     var noSleep = null;
     
     var recorder = null;
@@ -39,8 +45,8 @@
             newObj("집", "O_H", 4, ["집 묘사", "나의 방 묘사", "가족과 시간", "최근 변화"]),
             newObj("동네 & 이웃", "O_APT", 4, ["묘사", "이웃", "특별한 경험", "과거/현재 비교"]),
             newObj("영화", "O_MOV", 4, ["좋아하는 영화", "좋아하는 배우", "루틴", "기억에 남는 영화"]),
-
-            newObj("여행", "O_TRIP", 4, ["좋아하는 국내여행", "여행 시 챙기는 것", "첫 해외여행 경험", "기억에 남는 여행 경험"]),
+            newObj("여행", "O_TRIP", 4, ["국내여행지 소개", "챙기는 물품", "첫 해외여행 경험", "기억에 남는 여행"]),
+            
             newObj("공원", "O_PARK", 4, ["좋아하는 공원 설명", "공원에서 놀면 뭐하니?", "얼마나 자주 가니, 누구랑?", "특별한 경험"]),
             newObj("해변", "O_BEACH", 4, ["좋아하는 해변 설명", "해변갈 때 챙기는 아이템", "캠핑?", "캠핑 때 특별한 경험"]),
             newObj("음악", "O_MUSIC", 4, ["좋아하는 음악/가수", "언제 음악 듣니", "좋아하는 음악 변천사", "특별한 경험"]),
@@ -128,6 +134,7 @@
 
         noSleep = new NoSleep();
         noSleep.enable();
+        
 
         $('#loading').modal({backdrop: 'static', keyboard: false});
     }
